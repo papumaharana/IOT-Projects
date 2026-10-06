@@ -19,8 +19,8 @@ bool oledOK = false;
 #define HAPPY_HOLD_TIME 1500
 
 // L298N MINI MOTOR DRIVER
-#define IN1 12
-#define IN2 13
+#define IN1 14
+#define IN2 17
 #define IN3 15
 #define IN4 16
 
