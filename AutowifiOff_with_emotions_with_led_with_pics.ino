@@ -33,7 +33,7 @@
 #define OLED_SCL   6
 #define OLED_ADDR  0x3C
 
-#define TOUCH_PIN  3
+#define TOUCH_PIN  2
 #define BUZZER_PIN 4
 #define LED_PIN 7
 
