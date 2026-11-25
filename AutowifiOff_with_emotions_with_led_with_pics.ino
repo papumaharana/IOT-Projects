@@ -207,16 +207,18 @@ button:active{transform:scale(.96);background:#52627c}
 <button data-emo="laugh"><span class="emoji">😂</span>Laugh</button>
 <button data-emo="wow"><span class="emoji">😮</span>Wow</button>
 <button data-emo="excited"><span class="emoji">🤩</span>Excited</button>
+<button data-emo="love"><span class="emoji">❤️</span>Love</button>
 <button data-emo="wink"><span class="emoji">😉</span>Wink</button>
-<button data-emo="pleading"><span class="emoji">🥹</span>Pleading</button>
 <button data-emo="nerd"><span class="emoji">🤓</span>Nerd</button>
-<button data-emo="starstruck"><span class="emoji">🤩</span>Star Eyes</button>
+<button data-emo="pleading"><span class="emoji">🥹</span>Pleading</button>
 <button data-emo="dizzy"><span class="emoji">😵</span>Dizzy</button>
 <button data-emo="spiral"><span class="emoji">😵‍💫</span>Spiral</button>
+<button data-emo="starstruck"><span class="emoji">🤩</span>Star Eyes</button>
 <button data-emo="alien"><span class="emoji">👽</span>Alien</button>
-<button data-emo="love"><span class="emoji">❤️</span>Love</button>
 <button data-emo="me"><span class="emoji">🙋</span>ME</button>
-<button data-emo="besty"><span class="emoji">😼</span>BESTY</button>
+
+<!-- <button data-emo="besty"><span class="emoji">😼</span>BESTY</button> -->
+
 </div>
 <h3 style="margin-top:30px;">Display Controls</h3>
 <div class="display-controls">
@@ -396,9 +398,16 @@ bool isCustomEmotion(Emotion e) {
 
 void drawHeart(int cx, int cy, int size) {
   int r = size / 2;
-  display.fillCircle(cx - r / 2, cy - r / 3, r / 2 + 1, SH110X_WHITE);
-  display.fillCircle(cx + r / 2, cy - r / 3, r / 2 + 1, SH110X_WHITE);
-  display.fillTriangle(cx - size, cy, cx + size, cy, cx, cy + size, SH110X_WHITE);
+  // Two large rounded upper lobes
+  display.fillCircle(cx - r, cy - r / 2, r, SH110X_WHITE);
+  display.fillCircle(cx + r, cy - r / 2, r, SH110X_WHITE);
+  // Lower pointed section
+  display.fillTriangle(
+    cx - size, cy - 2,
+    cx + size, cy - 2,
+    cx, cy + size,
+    SH110X_WHITE
+  );
 }
 
 void drawSpiralEye(int cx, int cy) {
@@ -568,13 +577,19 @@ void drawCustomEmotion() {
       display.drawPixel(rightX + 12, eyeY + 20, SH110X_WHITE);
       break;
     case EMO_NERD:
+      // Thick glasses only – no eyes or pupils inside.
+      // Left lens – thicker frame
+      display.drawRoundRect(leftX - 18, eyeY - 16, 36, 32, 8, SH110X_WHITE);
       display.drawRoundRect(leftX - 17, eyeY - 15, 34, 30, 7, SH110X_WHITE);
+      display.drawRoundRect(leftX - 16, eyeY - 14, 32, 28, 6, SH110X_WHITE);
+      // Right lens – thicker frame
+      display.drawRoundRect(rightX - 18, eyeY - 16, 36, 32, 8, SH110X_WHITE);
       display.drawRoundRect(rightX - 17, eyeY - 15, 34, 30, 7, SH110X_WHITE);
-      display.drawLine(leftX + 17, eyeY - 5, rightX - 17, eyeY - 5, SH110X_WHITE);
-      display.fillCircle(leftX, eyeY, 5, SH110X_WHITE);
-      display.fillCircle(rightX, eyeY, 5, SH110X_WHITE);
-      display.fillCircle(leftX + 1, eyeY, 2, SH110X_BLACK);
-      display.fillCircle(rightX + 1, eyeY, 2, SH110X_BLACK);
+      display.drawRoundRect(rightX - 16, eyeY - 14, 32, 28, 6, SH110X_WHITE);
+      // Thick bridge connecting both glasses
+      display.drawLine(leftX + 18, eyeY - 5, rightX - 18, eyeY - 5, SH110X_WHITE);
+      display.drawLine(leftX + 18, eyeY - 4, rightX - 18, eyeY - 4, SH110X_WHITE);
+      display.drawLine(leftX + 18, eyeY - 3, rightX - 18, eyeY - 3, SH110X_WHITE);
       break;
     case EMO_STARSTRUCK:
       display.drawRoundRect(leftX - 15, eyeY - 16, 30, 32, 12, SH110X_WHITE);
@@ -607,10 +622,9 @@ void drawCustomEmotion() {
       display.fillCircle(rightX - 2, eyeY - 5, 3, SH110X_WHITE);
       break;
     case EMO_LOVE:
-      display.drawRoundRect(leftX - 15, eyeY - 16, 30, 32, 11, SH110X_WHITE);
-      display.drawRoundRect(rightX - 15, eyeY - 16, 30, 32, 11, SH110X_WHITE);
-      drawHeart(leftX, eyeY, 10);
-      drawHeart(rightX, eyeY, 10);
+      // Only two large heart-shaped eyes. No outer circles.
+      drawHeart(leftX, eyeY, 15);
+      drawHeart(rightX, eyeY, 15);
       break;
     case EMO_ME:
       display.drawBitmap(0, 0, meBitmap, 128, 64, SH110X_WHITE);
